@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konstnärsverktyg — akvarellskiss.se</title>
+<meta name="description" content="Gratis verktyg för svenska konstnärer. QR-kod för Swish, utställningschecklista, prislista, artist statement och mer. akvarellskiss.se">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #fcf9f3;
+  --earth: #5d4a3e;
+  --earth-light: #8a6f61;
+  --earth-dark: #3d2e25;
+  --cream: #f1ede4;
+  --cream-dark: #e0d8cc;
+  --white: #ffffff;
+  --text: #3a2e28;
+  --text-muted: #9b887e;
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 20px rgba(93,74,62,0.09);
+  --shadow-lg: 0 4px 32px rgba(93,74,62,0.13);
+}
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.site-header {
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  border-bottom: 1px solid var(--cream-dark);
+  margin-bottom: 2.5rem;
+}
+.site-header h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 300;
+  color: var(--earth);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.site-header .tagline {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  margin-top: 0.4rem;
+}
+.site-header .notice {
+  display: inline-block;
+  margin-top: 1rem;
+  background: var(--cream);
+  border: 1px solid var(--cream-dark);
+  border-radius: 30px;
+  padding: 0.35rem 1rem;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+.divider { width: 40px; height: 1px; background: var(--cream-dark); margin: 0.8rem auto; }
+
+/* ── Main wrap ── */
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.25rem 5rem;
+}
+
+/* ── Accordion ── */
+.tool-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.tool-card.open { box-shadow: var(--shadow-lg); }
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.4rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.18s;
+}
+.tool-header:hover { background: var(--cream); }
+.tool-icon {
+  width: 40px; height: 40px;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: background 0.18s;
+}
+.tool-card.open .tool-icon { background: var(--earth); }
+.tool-card.open .tool-icon span { filter: brightness(10); }
+.tool-titles { flex: 1; }
+.tool-titles h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--earth);
+  line-height: 1.2;
+}
+.tool-titles p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.tool-chevron {
+  width: 20px; height: 20px;
+  color: var(--text-muted);
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+.tool-card.open .tool-chevron { transform: rotate(180deg); }
+.tool-body {
+  display: none;
+  padding: 0 1.4rem 1.4rem;
+  border-top: 1px solid var(--cream-dark);
+}
+.tool-card.open .tool-body { display: block; }
+
+/* ── Form elements ── */
+.field { margin-bottom: 1rem; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--earth);
+  margin-bottom: 5px;
+}
+.field input, .field textarea, .field select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--cream-dark);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.18s;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  border-color: var(--earth-light);
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--text-muted); font-style: italic; }
+.field textarea { resize: vertical; min-height: 90px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+@media(max-width:480px){ .field-row { grid-template-columns: 1fr; } }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 0.58rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none;
+  transition: all 0.18s;
+  text-decoration: none;
+}
+.btn-primary { background: var(--earth); color: #fff; }
+.btn-primary:hover { background: var(--earth-dark); }
+.btn-secondary {
+  background: var(--cream);
+  color: var(--earth);
+  border: 1px solid var(--cream-dark);
+}
+.btn-secondary:hover { background: var(--cream-dark); }
+.btn-sm { padding: 0.42rem 0.8rem; font-size: 12px; }
+.btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+
+/* ── Section label ── */
+.section-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--earth);
+  margin: 1.2rem 0 0.6rem;
+  display: block;
+}
+.section-label:first-child { margin-top: 1rem; }
+
+/* ── Toggle tabs ── */
+.tab-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1.1rem;
+  background: var(--cream);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+.tab-btn {
+  flex: 1; padding: 0.42rem 0.5rem;
+  border: none; background: transparent;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px; font-weight: 400;
+  color: var(--text-muted);
+  cursor: pointer; transition: all 0.18s;
+  text-align: center;
+}
+.tab-btn.active { background: var(--white); color: var(--earth); font-weight: 500; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+/* ── QR output ── */
+.qr-output {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  padding: 1.5rem;
+  background: var(--cream);
+  border-radius: var(--radius-md);
+}
+.qr-output.visible { display: flex; }
+#qrCanvas { border-radius: 8px; }
+.qr-label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--earth);
+  text-align: center;
+}
+
+/* ── Checklist ── */
+.checklist-section { margin-bottom: 1.4rem; }
+.checklist-section-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--earth);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--cream-dark);
+}
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.38rem 0;
+  cursor: pointer;
+}
+.checklist-item input[type=checkbox] {
+  width: 16px; height: 16px;
+  accent-color: var(--earth);
+  margin-top: 2px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.checklist-item label {
+  font-size: 13.5px;
+  color: var(--text);
+  cursor: pointer;
+  line-height: 1.45;
+  flex: 1;
+}
+.checklist-item.checked label { text-decoration: line-through; color: var(--text-muted); }
+.deadline-badge {
+  font-size: 10px;
+  background: var(--cream);
+  color: var(--earth-light);
+  border-radius: 20px;
+  padding: 1px 7px;
+  white-space: nowrap;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Price list ── */
+.verk-list { margin: 0.8rem 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.verk-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  font-size: 13px;
+}
+.verk-item-info { line-height: 1.35; }
+.verk-item-title { font-weight: 500; color: var(--text); }
+.verk-item-meta { font-size: 11.5px; color: var(--text-muted); }
+.verk-item-price { font-weight: 500; color: var(--earth); white-space: nowrap; }
+.verk-remove {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted); font-size: 16px; padding: 0 0 0 0.5rem;
+  transition: color 0.15s;
+}
+.verk-remove:hover { color: #c0392b; }
+
+/* ── Statement ── */
+.statement-output {
+  display: none;
+  margin-top: 1rem;
+}
+.statement-output.visible { display: block; }
+.statement-text {
+  background: var(--cream);
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text);
+  white-space: pre-wrap;
+  border: 1px solid var(--cream-dark);
+}
+.statement-edit {
+  width: 100%;
+  background: var(--cream);
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text);
+  border: 1px solid var(--cream-dark);
+  resize: vertical;
+  min-height: 200px;
+  outline: none;
+}
+.statement-edit:focus { border-color: var(--earth-light); }
+
+/* ── Hanging planner ── */
+.wall-canvas-wrap {
+  background: var(--cream);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 0.8rem;
+  overflow-x: auto;
+}
+#wallCanvas {
+  display: block;
+  border-radius: 6px;
+  cursor: crosshair;
+  max-width: 100%;
+}
+.wall-legend {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 0.6rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ── Print styles ── */
+@media print {
+  body { background: #fff; font-size: 12pt; }
+  .site-header, .tool-header, .tool-card:not(.printing) { display: none !important; }
+  .tool-card.printing { box-shadow: none; }
+  .tool-card.printing .tool-body { display: block !important; padding: 0; }
+  .btn-row, .btn, .tab-row, .field, .wall-canvas-wrap { display: none !important; }
+  .print-area { display: block !important; }
+  .print-header { margin-bottom: 1.5rem; }
+  .print-header h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22pt; font-weight: 300; color: #5d4a3e;
+  }
+  .print-header p { font-size: 10pt; color: #9b887e; }
+  .print-branding { font-size: 8pt; color: #9b887e; text-align: right; margin-top: 2rem; border-top: 0.5pt solid #e0d8cc; padding-top: 0.5rem; }
+}
+.print-area { display: none; }
+
+/* ── Footer ── */
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--cream-dark);
+  margin-top: 2rem;
+}
+.site-footer a { color: var(--earth-light); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Konstnärsverktyg</h1>
+  <div class="divider"></div>
+  <p class="tagline">akvarellskiss.se</p>
+  <span class="notice">🔒 Inget sparas — stänger du fönstret försvinner allt. Kom ihåg att ladda ner det du behöver.</span>
+</header>
+
+<div class="wrap">
+
+  <!-- ══════════════════════════════════════════
+       1. QR-GENERATOR
+  ══════════════════════════════════════════ -->
+  <div class="tool-card" id="card-qr">
+    <div class="tool-header" onclick="toggleCard('qr')">
+      <div class="tool-icon"><span>📱</span></div>
+      <div class="tool-titles">
+        <h2>QR-kodsgenerator</h2>
+        <p>Swish-kod eller länk till din hemsida / Instagram</p>
+      </div>
+      <svg class="tool-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="tool-body">
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="setQrMode('swish',this)">Swish</button>
+        <button class="tab-btn" onclick="setQrMode('link',this)">Länk / hemsida</button>
+      </div>
+
+      <!-- Swish mode -->
+      <div id="qr-swish">
+        <div class="field">
+          <label>Ditt Swish-nummer</label>
+          <input type="tel" id="swishNr" placeholder="07X XXX XX XX" maxlength="20">
+        </div>
+        <div class="field">
+          <label>Meddelande till betalaren (valfritt)</label>
+          <input type="text" id="swishMsg" placeholder="t.ex. Konstköp — ange verkets titel" maxlength="50">
+        </div>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:-0.3rem">Beloppet fyller köparen i själv i Swish-appen.</p>
+      </div>
+
+      <!-- Link mode -->
+      <div id="qr-link" style="display:none">
+        <div class="field">
+          <label>URL — hemsida, Instagram eller annan länk</label>
+          <input type="url" id="linkUrl" placeholder="https://www.din-hemsida.se">
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:0.8rem">
+        <label>Etikett under QR-koden (valfritt)</label>
+        <input type="text" id="qrLabel" placeholder="t.ex. Betala med Swish eller Besök min hemsida">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="generateQR()">Generera QR-kod</button>
+      </div>
+
+      <div class="qr-output" id="qrOutput">
+        <div id="qrCanvas"></div>
+        <p class="qr-label" id="qrLabelText"></p>
+        <div class="btn-row" style="margin-top:0">
+          <button class="btn btn-secondary btn-sm" onclick="downloadQR('png')">↓ Ladda ner PNG</button>
+          <button class="btn btn-secondary btn-sm" onclick="printQR()">🖨 Skriv ut</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       2. UTSTÄLLNINGSCHECKLISTA
+  ══════════════════════════════════════════ -->
+  <div class="tool-card" id="card-checklist">
+    <div class="tool-header" onclick="toggleCard('checklist')">
+      <div class="tool-icon"><span>✅</span></div>
+      <div class="tool-titles">
+        <h2>Utställningschecklista</h2>
+        <p>Allt du behöver tänka på — med deadlines utifrån vernissagedatum</p>
+      </div>
+      <svg class="tool-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="tool-body">
+      <div class="field-row">
+        <div class="field">
+          <label>Vernissagedatum</label>
+          <input type="date" id="vernissageDate" onchange="renderChecklist()">
+        </div>
+        <div class="field">
+          <label>Utställningens namn (valfritt)</label>
+          <input type="text" id="checklistTitle" placeholder="t.ex. Ljus och skugga">
+        </div>
+      </div>
+      <div id="checklistContainer"></div>
+      <div class="btn-row">
+        <button class="btn btn-secondary btn-sm" onclick="printChecklist()">🖨 Skriv ut / Spara som PDF</button>
+        <button class="btn btn-secondary btn-sm" onclick="resetChecklist()">Rensa bockar</button>
+      </div>
+
+      <!-- Print area -->
+      <div class="print-area" id="checklistPrint"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       3. PRISLISTA
+  ══════════════════════════════════════════ -->
+  <div class="tool-card" id="card-price">
+    <div class="tool-header" onclick="toggleCard('price')">
+      <div class="tool-icon"><span>🏷</span></div>
+      <div class="tool-titles">
+        <h2>Prislista</h2>
+        <p>Skapa en snygg prislista för din utställning</p>
+      </div>
+      <svg class="tool-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="tool-body">
+      <div class="field-row">
+        <div class="field">
+          <label>Konstnärens namn</label>
+          <input type="text" id="priceArtist" placeholder="Ditt namn">
+        </div>
+        <div class="field">
+          <label>Utställningens namn</label>
+          <input type="text" id="priceExhibition" placeholder="t.ex. Ljus och skugga">
+        </div>
+      </div>
+
+      <span class="section-label">Lägg till verk</span>
+      <div class="field-row">
+        <div class="field">
+          <label>Titel</label>
+          <input type="text" id="verkTitle" placeholder="Verkets titel">
+        </div>
+        <div class="field">
+          <label>Pris (kr)</label>
+          <input type="number" id="verkPrice" placeholder="3 500">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Mått</label>
+          <input type="text" id="verkMatt" placeholder="40 × 50 cm">
+        </div>
+        <div class="field">
+          <label>Medium</label>
+          <input type="text" id="verkMedium" placeholder="Akvarell på papper">
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="addVerk()">+ Lägg till verk</button>
+
+      <div class="verk-list" id="verkList"></div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="printPriceList()">🖨 Skriv ut / Spara som PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       4. ARTIST STATEMENT
+  ══════════════════════════════════════════ -->
+  <div class="tool-card" id="card-statement">
+    <div class="tool-header" onclick="toggleCard('statement')">
+      <div class="tool-icon"><span>✍️</span></div>
+      <div class="tool-titles">
+        <h2>Artist statement</h2>
+        <p>Svara på några frågor — få ett utkast att redigera fritt</p>
+      </div>
+      <svg class="tool-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="tool-body">
+      <div class="field">
+        <label>Vilket medium använder du främst?</label>
+        <input type="text" id="s1" placeholder="t.ex. akvarell, olja, blandteknik…">
+      </div>
+      <div class="field">
+        <label>Vad inspirerar dig — vad utgår du ofta ifrån?</label>
+        <input type="text" id="s2" placeholder="t.ex. naturen, ljuset, minnen, det nordiska…">
+      </div>
+      <div class="field">
+        <label>Vad försöker du förmedla eller utforska i ditt skapande?</label>
+        <textarea id="s3" placeholder="t.ex. stillhet, rörelse, det flyktiga ögonblicket…"></textarea>
+      </div>
+      <div class="field">
+        <label>Hur arbetar du — berätta om din process</label>
+        <textarea id="s4" placeholder="t.ex. spontant och intuitivt, noggrant förberett, ute i naturen…"></textarea>
+      </div>
+      <div class="field">
+        <label>Vad hoppas du att betraktaren ska känna eller ta med sig?</label>
+        <input type="text" id="s5" placeholder="t.ex. ro, igenkänning, nyfikenhet…">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="generateStatement()">Generera utkast</button>
+      </div>
+
+      <div class="statement-output" id="statementOutput">
+        <span class="section-label">Ditt utkast — redigera fritt</span>
+        <textarea class="statement-edit" id="statementEdit"></textarea>
+        <div class="btn-row">
+          <button class="btn btn-secondary btn-sm" onclick="copyStatement()">📋 Kopiera text</button>
+          <button class="btn btn-secondary btn-sm" onclick="printStatement()">🖨 Skriv ut / Spara som PDF</button>
+        </div>
+        <p style="font-size:11.5px;color:var(--text-muted);margin-top:0.5rem">Texten är ett startförslag — gör den till din egen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       5. PRESS KIT
+  ══════════════════════════════════════════ -->
+  <div class="tool-card" id="card-press">
+    <div class="tool-header" onclick="toggleCard('press')">
+      <div class="tool-icon"><span>📰</span></div>
+      <div class="tool-titles">
+        <h2>Press kit</h2>
+        <p>Samla din bio, statement och verkslista — redo att skriva ut</p>
+      </div>
+      <svg class="tool-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="tool-body">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;line-height:1.6">
+        Fyll i uppgifterna nedan. Om du redan fyllt i Artist statement och Prislista kan du kopiera därifrån.
+      </p>
+      <div class="field-row">
+        <div class="field">
+          <label>Konstnärens namn</label>
+          <input type="text" id="pressName" placeholder="Ditt namn">
+        </div>
+        <div class="field">
+          <label>Utställningens namn</label>
+          <input type="text" id="pressExhibition" placeholder="t.ex. Ljus och skugga">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Plats</label>
+          <input type="text" id="pressVenue" placeholder="t.ex. Galleri Nord, Stockholm">
+        </div>
+        <div class="field">
+          <label>Datum</label>
+          <input type="text" id="pressDates" placeholder="t.ex. 12–28 september 2025">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Vernissage</label>
+          <input type="text" id="pressVernissage" placeholder="t.ex. fredag 12 sep kl 17–20">
+        </div>
+        <div class="field">
+          <label>Kontakt / hemsida</label>
+          <input type="text" id="pressContact" placeholder="www.din-hemsida.se">
+        </div>
+      </div>
+      <div class="field">
+        <label>Kort bio (2–4 meningar)</label>
+        <textarea id="pressBio" placeholder="Skriv en kort presentation av dig och ditt konstnärskap…"></textarea>
+      </div>
+      <div class="field">
+        <label>Artist statement</label>
+        <textarea id="pressStatement" placeholder="Klistra in från Artist statement-verktyget ovan, eller skriv här…"></textarea>
+      </div>
+      <div class="field">
+        <label>Verkslista (en rad per verk)</label>
+        <textarea id="pressWorks" placeholder="t.ex.&#10;Morgondimma, akvarell, 40×50 cm, 4 500 kr&#10;Havet i maj, akvarell, 60×80 cm, 7 500 kr"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="printPressKit()">🖨 Skriv ut / Spara som PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       6. HÄNGNINGSPLANERARE
+  ══════════════════════════════════════════ -->
+  <div class="tool-card" id="card-hang">
+    <div class="tool-header" onclick="toggleCard('hang')">
+      <div class="tool-icon"><span>🖼</span></div>
+      <div class="tool-titles">
+        <h2>Hängningsplanerare</h2>
+        <p>Planera hur verken ska placeras på väggen</p>
+      </div>
+      <svg class="tool-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="tool-body">
+      <div class="field-row">
+        <div class="field">
+          <label>Väggbredd (cm)</label>
+          <input type="number" id="wallWidth" placeholder="400" value="400" min="50" max="2000">
+        </div>
+        <div class="field">
+          <label>Väggnamn / etikett</label>
+          <input type="text" id="wallName" placeholder="t.ex. Nordväggen">
+        </div>
+      </div>
+
+      <span class="section-label">Lägg till verk på väggen</span>
+      <div class="field-row">
+        <div class="field">
+          <label>Titel</label>
+          <input type="text" id="hangTitle" placeholder="Verkets titel">
+        </div>
+        <div class="field">
+          <label>Bredd (cm)</label>
+          <input type="number" id="hangW" placeholder="50" min="5" max="500">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Höjd (cm)</label>
+          <input type="number" id="hangH" placeholder="40" min="5" max="500">
+        </div>
+        <div class="field" style="display:flex;align-items:flex-end">
+          <button class="btn btn-secondary btn-sm" style="width:100%" onclick="addHangVerk()">+ Lägg till på väggen</button>
+        </div>
+      </div>
+
+      <div class="wall-canvas-wrap">
+        <canvas id="wallCanvas" height="200"></canvas>
+        <p class="wall-legend" id="wallLegend">Ange väggbredd och lägg till verk ovan</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary btn-sm" onclick="clearWall()">Rensa vägg</button>
+        <button class="btn btn-secondary btn-sm" onclick="printWall()">🖨 Skriv ut planering</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<footer class="site-footer">
+  <a href="https://www.akvarellskiss.se">akvarellskiss.se</a> &mdash; Gratis verktyg för svenska konstnärer &mdash; Inget sparas, allt körs lokalt i din webbläsare
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+// ── Accordion ─────────────────────────────────────
+function toggleCard(id) {
+  const card = document.getElementById('card-'+id);
+  const isOpen = card.classList.contains('open');
+  // close all
+  document.querySelectorAll('.tool-card').forEach(c=>c.classList.remove('open'));
+  if(!isOpen) card.classList.add('open');
+}
+window.toggleCard = toggleCard;
+
+// ── 1. QR GENERATOR ───────────────────────────────
+let qrMode = 'swish';
+let qrInstance = null;
+
+window.setQrMode = function(mode, btn) {
+  qrMode = mode;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('qr-swish').style.display = mode==='swish'?'block':'none';
+  document.getElementById('qr-link').style.display  = mode==='link'?'block':'none';
+  document.getElementById('qrOutput').classList.remove('visible');
+};
+
+window.generateQR = function() {
+  let data = '';
+  if(qrMode==='swish'){
+    const nr = document.getElementById('swishNr').value.trim().replace(/\s/g,'');
+    if(!nr){ alert('Fyll i ditt Swish-nummer.'); return; }
+    const msg = document.getElementById('swishMsg').value.trim();
+    // Swish URI format: swish://payment?phone=XXXX&message=YYY
+    data = 'swish://payment?phone=' + encodeURIComponent(nr);
+    if(msg) data += '&message=' + encodeURIComponent(msg);
+  } else {
+    let url = document.getElementById('linkUrl').value.trim();
+    if(!url){ alert('Fyll i en URL.'); return; }
+    if(!url.startsWith('http')) url = 'https://'+url;
+    data = url;
+  }
+
+  const label = document.getElementById('qrLabel').value.trim();
+  document.getElementById('qrLabelText').textContent = label;
+
+  const container = document.getElementById('qrCanvas');
+  container.innerHTML = '';
+  qrInstance = new QRCode(container, {
+    text: data,
+    width: 220,
+    height: 220,
+    colorDark: '#3a2e28',
+    colorLight: '#fcf9f3',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  document.getElementById('qrOutput').classList.add('visible');
+};
+
+window.downloadQR = function() {
+  setTimeout(()=>{
+    const img = document.querySelector('#qrCanvas img');
+    if(!img){ alert('Generera QR-koden först.'); return; }
+    const a = document.createElement('a');
+    a.download = 'qr-akvarellskiss.png';
+    a.href = img.src;
+    a.click();
+  }, 100);
+};
+
+window.printQR = function() {
+  const img = document.querySelector('#qrCanvas img');
+  if(!img){ alert('Generera QR-koden först.'); return; }
+  const label = document.getElementById('qrLabelText').textContent;
+  const win = window.open('','_blank','width=400,height=500');
+  win.document.write(`<!DOCTYPE html><html><head><title>QR-kod</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:1rem;background:#fcf9f3;padding:2rem;}
+    img{width:220px;height:220px;}
+    p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#5d4a3e;text-align:center;}
+    small{font-size:10px;color:#9b887e;}
+  </style></head><body>
+  <img src="${img.src}">
+  ${label?`<p>${label}</p>`:''}
+  <small>akvarellskiss.se</small>
+  <script>window.onload=()=>{window.print();}<\/script>
+  </body></html>`);
+  win.document.close();
+};
+
+// ── 2. CHECKLIST ──────────────────────────────────
+const CHECKLIST_DATA = [
+  { cat: 'Verken', offset: -42, items: [
+    'Alla verk klara, signerade och torra',
+    'Verken fotograferade i bra ljus (för webb och press)',
+    'Titlar bestämda för alla verk',
+    'Mått noterade (med och utan ram)',
+    'Medium, teknik och år dokumenterat',
+    'Alla verk prissatta',
+    'Verken inramade eller monterade konsekvent',
+    'Transportskydd ordnat',
+  ]},
+  { cat: 'Lokalen', offset: -28, items: [
+    'Kontrakt med galleri/lokal signerat',
+    'Datum för in- och uthängning bekräftade',
+    'Belysning kontrollerad — räcker den?',
+    'Klarlagt vad som ingår (bord, stolar, WiFi, kassa)',
+    'Försäkring under utställningstiden ordnad',
+    'Öppettider bestämda — vem vaktar när?',
+  ]},
+  { cat: 'Kommunikation & marknadsföring', offset: -21, items: [
+    'Inbjudan designad (digital och/eller fysisk)',
+    'Inbjudningslista klar (vänner, kunder, press, gallerister)',
+    'Fysiska inbjudningar skickade',
+    'Evenemang skapat på Facebook/Instagram',
+    'Inlägg planerade — teaser, vernissagedag, påminnelse',
+    'Pressrelease skickad till lokaltidning och kultursidor',
+    'Kulturkalendrar uppdaterade (kommunen, tidningar, Visit)',
+    'Affisch i lokala butiker/bibliotek/kaféer',
+  ]},
+  { cat: 'Försäljning', offset: -14, items: [
+    'Prislista klar och utskriven',
+    'Prislapp eller nummer vid varje verk',
+    'Swish-nummer redo',
+    'QR-kod för Swish genererad och utskriven',
+    'Kortläsare om du vill erbjuda kortbetalning',
+    'Kvittolösning ordnad (app eller block)',
+    'Bestämt om priset inkluderar ram',
+    'Plan för leverans av sålda verk',
+  ]},
+  { cat: 'Vernissage', offset: -7, items: [
+    'Champagne eller mousserande vin inköpt',
+    'Alkoholfritt alternativ ordnat',
+    'Mat — salta pinnar, oliver, ostar, druvor',
+    'Glas, tallrikar, servetter, dukar',
+    'Välkomsthälsning förberedd',
+    'Musik planerad (bakgrund eller live)',
+    'Gästbok eller QR för e-postlista',
+    'Någon som fotograferar kvällen',
+    'Visitkort och/eller QR till hemsidan synlig',
+  ]},
+  { cat: 'Efter utställningen', offset: 1, items: [
+    'Tacka besökare i sociala medier med foton',
+    'Följa upp med press som inte kom',
+    'Dokumentera sålda verk',
+    'Kontakta köpare om leverans/upphämtning',
+    'Uppdatera hemsidan med utställningsbilder',
+    'Skriva ned vad som fungerade och vad du skulle göra annorlunda',
+  ]},
+];
+
+let checkState = {};
+
+function getDeadlineLabel(offsetDays, vernDate) {
+  if(!vernDate) return '';
+  const vd = new Date(vernDate);
+  const target = new Date(vd);
+  target.setDate(vd.getDate() + offsetDays);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = Math.round((target-today)/(1000*60*60*24));
+  if(offsetDays >= 1) return 'Efter vernissagen';
+  if(diff < 0) return 'Förfallet';
+  if(diff === 0) return 'Idag';
+  if(diff === 1) return 'Imorgon';
+  if(diff <= 7) return diff + ' dagar kvar';
+  const weeks = Math.round(diff/7);
+  return weeks + (weeks===1?' vecka kvar':' veckor kvar');
+}
+
+window.renderChecklist = function() {
+  const vernDate = document.getElementById('vernissageDate').value;
+  const container = document.getElementById('checklistContainer');
+  container.innerHTML = '';
+
+  CHECKLIST_DATA.forEach(section=>{
+    const sec = document.createElement('div');
+    sec.className = 'checklist-section';
+    const title = document.createElement('div');
+    title.className = 'checklist-section-title';
+    title.textContent = section.cat;
+    sec.appendChild(title);
+
+    const badge = vernDate ? getDeadlineLabel(section.offset, vernDate) : '';
+
+    section.items.forEach((item,i)=>{
+      const key = section.cat+'_'+i;
+      const row = document.createElement('div');
+      row.className = 'checklist-item' + (checkState[key]?' checked':'');
+
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.id = 'cb_'+key;
+      cb.checked = !!checkState[key];
+      cb.onchange = function(){ checkState[key]=this.checked; row.classList.toggle('checked',this.checked); };
+
+      const lbl = document.createElement('label');
+      lbl.htmlFor = 'cb_'+key;
+      lbl.textContent = item;
+
+      row.appendChild(cb);
+      row.appendChild(lbl);
+
+      if(badge && i===0){
+        const b = document.createElement('span');
+        b.className = 'deadline-badge';
+        b.textContent = badge;
+        row.appendChild(b);
+      }
+
+      sec.appendChild(row);
+    });
+    container.appendChild(sec);
+  });
+};
+
+// Render empty checklist on load
+renderChecklist();
+
+window.resetChecklist = function(){ checkState={}; renderChecklist(); };
+
+window.printChecklist = function() {
+  const title = document.getElementById('checklistTitle').value.trim();
+  const vernDate = document.getElementById('vernissageDate').value;
+  let html = `<h2>${title||'Utställningschecklista'}</h2>`;
+  if(vernDate) html += `<p>Vernissage: ${new Date(vernDate).toLocaleDateString('sv-SE',{day:'numeric',month:'long',year:'numeric'})}</p>`;
+  html += '<br>';
+  CHECKLIST_DATA.forEach(section=>{
+    html += `<h3 style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:14pt;color:#5d4a3e;margin:1rem 0 0.3rem;border-bottom:0.5pt solid #e0d8cc;padding-bottom:0.2rem">${section.cat}</h3>`;
+    section.items.forEach((item,i)=>{
+      const key = section.cat+'_'+i;
+      const checked = checkState[key];
+      html += `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;font-size:11pt;${checked?'color:#9b887e;text-decoration:line-through':''}">
+        <span style="width:14px;height:14px;border:1pt solid #9b887e;display:inline-block;border-radius:2px;flex-shrink:0;background:${checked?'#5d4a3e':'transparent'};"></span>
+        ${item}
+      </div>`;
+    });
+  });
+  openPrintWindow(html, title||'Utställningschecklista');
+};
+
+// ── 3. PRICE LIST ─────────────────────────────────
+let verks = [];
+
+window.addVerk = function() {
+  const title  = document.getElementById('verkTitle').value.trim();
+  const price  = document.getElementById('verkPrice').value.trim();
+  const matt   = document.getElementById('verkMatt').value.trim();
+  const medium = document.getElementById('verkMedium').value.trim();
+  if(!title){ alert('Ange en titel.'); return; }
+  verks.push({title,price,matt,medium,id:Date.now()});
+  renderVerkList();
+  ['verkTitle','verkPrice','verkMatt','verkMedium'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('verkTitle').focus();
+};
+
+function renderVerkList(){
+  const list = document.getElementById('verkList');
+  if(!verks.length){ list.innerHTML=''; return; }
+  list.innerHTML = verks.map(v=>`
+    <div class="verk-item">
+      <div class="verk-item-info">
+        <div class="verk-item-title">${v.title}</div>
+        <div class="verk-item-meta">${[v.medium,v.matt].filter(Boolean).join(' · ')}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.4rem">
+        <span class="verk-item-price">${v.price?v.price+' kr':''}</span>
+        <button class="verk-remove" onclick="removeVerk(${v.id})">×</button>
+      </div>
+    </div>`).join('');
+}
+
+window.removeVerk = function(id){ verks=verks.filter(v=>v.id!==id); renderVerkList(); };
+
+window.printPriceList = function(){
+  const artist = document.getElementById('priceArtist').value.trim();
+  const exh    = document.getElementById('priceExhibition').value.trim();
+  if(!verks.length){ alert('Lägg till minst ett verk.'); return; }
+  let html = `<h2>${artist||'Konstnärens namn'}</h2>`;
+  if(exh) html += `<p style="font-style:italic;color:#9b887e">${exh}</p>`;
+  html += `<br><table style="width:100%;border-collapse:collapse;font-size:11pt">
+    <thead><tr style="border-bottom:1pt solid #5d4a3e">
+      <th style="text-align:left;padding:4pt 6pt;font-weight:500">Titel</th>
+      <th style="text-align:left;padding:4pt 6pt;font-weight:500">Medium</th>
+      <th style="text-align:left;padding:4pt 6pt;font-weight:500">Mått</th>
+      <th style="text-align:right;padding:4pt 6pt;font-weight:500">Pris</th>
+    </tr></thead><tbody>`;
+  verks.forEach((v,i)=>{
+    html += `<tr style="border-bottom:0.5pt solid #e0d8cc;background:${i%2?'#fcf9f3':'#fff'}">
+      <td style="padding:4pt 6pt">${v.title}</td>
+      <td style="padding:4pt 6pt;color:#9b887e">${v.medium||''}</td>
+      <td style="padding:4pt 6pt;color:#9b887e">${v.matt||''}</td>
+      <td style="padding:4pt 6pt;text-align:right">${v.price?v.price+' kr':'–'}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  openPrintWindow(html, 'Prislista');
+};
+
+// ── 4. ARTIST STATEMENT ───────────────────────────
+window.generateStatement = function(){
+  const medium = document.getElementById('s1').value.trim();
+  const inspo  = document.getElementById('s2').value.trim();
+  const formedl= document.getElementById('s3').value.trim();
+  const process= document.getElementById('s4').value.trim();
+  const kansla = document.getElementById('s5').value.trim();
+
+  if(!medium && !inspo){ alert('Fyll i åtminstone medium och inspiration.'); return; }
+
+  let text = '';
+
+  // Opening — medium and context
+  if(medium){
+    text += `Mitt konstnärskap rör sig inom ${medium}. `;
+  }
+
+  // Inspiration
+  if(inspo){
+    text += `Det är framför allt ${inspo} som driver mitt skapande framåt och ger det dess riktning. `;
+  }
+
+  // What they explore / convey
+  if(formedl){
+    text += `\n\nI mitt arbete söker jag utforska ${formedl}. `;
+    text += `Det finns en strävan efter att fånga något väsentligt — något som är svårt att sätta ord på men som genast känns igen.`;
+  }
+
+  // Process
+  if(process){
+    text += `\n\nMin process är ${process}. `;
+    text += `Jag värdesätter det som uppstår i mötet mellan intention och material — de oväntade vändningarna, det som inte kan planeras.`;
+  }
+
+  // What they hope viewer feels
+  if(kansla){
+    text += `\n\nMitt hopp är att den som möter mina verk ska bära med sig en känsla av ${kansla} — `;
+    text += `en stund av kontakt med något bortom det vardagliga.`;
+  }
+
+  document.getElementById('statementEdit').value = text.trim();
+  document.getElementById('statementOutput').classList.add('visible');
+  document.getElementById('statementOutput').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+
+window.copyStatement = function(){
+  const text = document.getElementById('statementEdit').value;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = event.target;
+    btn.textContent = '✓ Kopierad!';
+    setTimeout(()=>btn.textContent='📋 Kopiera text', 2000);
+  });
+};
+
+window.printStatement = function(){
+  const text = document.getElementById('statementEdit').value;
+  if(!text.trim()){ alert('Generera ett statement först.'); return; }
+  const html = `<div style="font-family:'Cormorant Garamond',serif;font-size:13pt;line-height:1.9;white-space:pre-wrap;color:#3a2e28">${text}</div>`;
+  openPrintWindow(html, 'Artist Statement');
+};
+
+// ── 5. PRESS KIT ──────────────────────────────────
+window.printPressKit = function(){
+  const name      = document.getElementById('pressName').value.trim();
+  const exh       = document.getElementById('pressExhibition').value.trim();
+  const venue     = document.getElementById('pressVenue').value.trim();
+  const dates     = document.getElementById('pressDates').value.trim();
+  const vern      = document.getElementById('pressVernissage').value.trim();
+  const contact   = document.getElementById('pressContact').value.trim();
+  const bio       = document.getElementById('pressBio').value.trim();
+  const statement = document.getElementById('pressStatement').value.trim();
+  const works     = document.getElementById('pressWorks').value.trim();
+
+  let html = '';
+  if(name) html += `<h2 style="font-size:22pt;font-weight:300">${name}</h2>`;
+  if(exh)  html += `<h3 style="font-size:16pt;font-weight:300;font-style:italic;color:#8a6f61">${exh}</h3>`;
+
+  if(venue||dates||vern||contact){
+    html += `<table style="margin:1rem 0;font-size:10pt;color:#9b887e">`;
+    if(venue)   html += `<tr><td style="padding-right:1rem;font-weight:500;color:#5d4a3e">Plats</td><td>${venue}</td></tr>`;
+    if(dates)   html += `<tr><td style="padding-right:1rem;font-weight:500;color:#5d4a3e">Datum</td><td>${dates}</td></tr>`;
+    if(vern)    html += `<tr><td style="padding-right:1rem;font-weight:500;color:#5d4a3e">Vernissage</td><td>${vern}</td></tr>`;
+    if(contact) html += `<tr><td style="padding-right:1rem;font-weight:500;color:#5d4a3e">Kontakt</td><td>${contact}</td></tr>`;
+    html += `</table>`;
+  }
+
+  if(bio){
+    html += `<h4 style="font-size:9pt;text-transform:uppercase;letter-spacing:0.1em;color:#5d4a3e;margin:1.5rem 0 0.4rem">Om konstnären</h4>`;
+    html += `<p style="font-size:11pt;line-height:1.7">${bio}</p>`;
+  }
+  if(statement){
+    html += `<h4 style="font-size:9pt;text-transform:uppercase;letter-spacing:0.1em;color:#5d4a3e;margin:1.5rem 0 0.4rem">Artist Statement</h4>`;
+    html += `<p style="font-family:'Cormorant Garamond',serif;font-size:12pt;line-height:1.85;white-space:pre-wrap">${statement}</p>`;
+  }
+  if(works){
+    html += `<h4 style="font-size:9pt;text-transform:uppercase;letter-spacing:0.1em;color:#5d4a3e;margin:1.5rem 0 0.4rem">Verk i utställningen</h4>`;
+    const lines = works.split('\n').filter(l=>l.trim());
+    html += `<ul style="font-size:11pt;line-height:1.8;padding-left:1.2rem">`;
+    lines.forEach(l=>{ html+=`<li>${l}</li>`; });
+    html += `</ul>`;
+  }
+
+  openPrintWindow(html, 'Press Kit — '+(name||'akvarellskiss.se'));
+};
+
+// ── 6. HANGING PLANNER ────────────────────────────
+let hangVerks = [];
+const WALL_H_CM = 240; // standard wall height for display
+const HANG_HEIGHT_CM = 155; // centre of artwork from floor
+
+function renderWall(){
+  const ww = parseInt(document.getElementById('wallWidth').value)||400;
+  const wallName = document.getElementById('wallName').value.trim();
+  const canvas = document.getElementById('wallCanvas');
+  const wrap = canvas.parentElement;
+  const displayW = Math.min(wrap.clientWidth - 32, 660);
+  const scale = displayW / ww; // px per cm
+  const displayH = Math.round(WALL_H_CM * scale);
+
+  canvas.width  = displayW;
+  canvas.height = displayH;
+  canvas.style.width  = displayW+'px';
+  canvas.style.height = displayH+'px';
+
+  const c = canvas.getContext('2d');
+
+  // Wall background
+  const bg = c.createLinearGradient(0,0,displayW,displayH);
+  bg.addColorStop(0,'#f0e8dc'); bg.addColorStop(1,'#e6dcd0');
+  c.fillStyle=bg; c.fillRect(0,0,displayW,displayH);
+
+  // Floor line
+  c.strokeStyle='rgba(93,74,62,0.25)'; c.lineWidth=1.5;
+  c.beginPath(); c.moveTo(0,displayH-1); c.lineTo(displayW,displayH-1); c.stroke();
+
+  // Wall label
+  if(wallName){
+    c.fillStyle='rgba(93,74,62,0.35)';
+    c.font=`300 ${Math.round(displayH*0.06)}px 'DM Sans',sans-serif`;
+    c.textAlign='left';
+    c.fillText(wallName, 8, displayH*0.08);
+  }
+
+  // Hang line (eye level guide)
+  const hangY = displayH - (HANG_HEIGHT_CM * scale);
+  c.strokeStyle='rgba(93,74,62,0.10)'; c.lineWidth=0.75; c.setLineDash([4,6]);
+  c.beginPath(); c.moveTo(0,hangY); c.lineTo(displayW,hangY); c.stroke();
+  c.setLineDash([]);
+
+  // Place verks — simple left-to-right auto layout with 20cm gap
+  let cursor = 20; // start 20cm from left edge
+  const GAP_CM = 15;
+  const FRAME_CM = 4;
+
+  hangVerks.forEach((v,i)=>{
+    const tw = (v.w + FRAME_CM*2) * scale;
+    const th = (v.h + FRAME_CM*2) * scale;
+    const x = cursor * scale;
+    // centre artwork at hang height
+    const artCentreY = displayH - (HANG_HEIGHT_CM * scale);
+    const y = artCentreY - th/2;
+
+    // Frame shadow
+    c.save();
+    c.shadowColor='rgba(10,6,3,0.10)'; c.shadowBlur=8; c.shadowOffsetY=4;
+    c.fillStyle='rgba(0,0,0,0.001)';
+    c.fillRect(x,y,tw,th);
+    c.restore();
+
+    // Frame body
+    const frameGrad = c.createLinearGradient(x,y,x+tw,y+th);
+    frameGrad.addColorStop(0,'#c8a97a'); frameGrad.addColorStop(0.5,'#9d7a52'); frameGrad.addColorStop(1,'#c8a97a');
+    c.fillStyle=frameGrad; c.fillRect(x,y,tw,th);
+
+    // Mat
+    const matPx = FRAME_CM*0.6*scale;
+    c.fillStyle='#f9f6f0';
+    c.fillRect(x+matPx,y+matPx,tw-matPx*2,th-matPx*2);
+
+    // Art area
+    const artX = x+matPx*1.6, artY=y+matPx*1.6;
+    const artW = tw-matPx*3.2, artH = th-matPx*3.2;
+    const ag = c.createLinearGradient(artX,artY,artX+artW,artY+artH);
+    ag.addColorStop(0,'#ddd4c8'); ag.addColorStop(1,'#c8bdb0');
+    c.fillStyle=ag; c.fillRect(artX,artY,artW,artH);
+
+    // Title label below
+    const labelY = y+th+Math.min(14,scale*4);
+    c.fillStyle='#5d4a3e';
+    c.font=`${Math.max(9,Math.min(12,scale*5))}px 'DM Sans',sans-serif`;
+    c.textAlign='center';
+    const labelX = x+tw/2;
+    c.fillText(v.title.length>14?v.title.substring(0,13)+'…':v.title, labelX, labelY);
+
+    // Dimensions
+    c.fillStyle='#9b887e';
+    c.font=`${Math.max(8,Math.min(10,scale*4))}px 'DM Sans',sans-serif`;
+    c.fillText(`${v.w}×${v.h}`, labelX, labelY+Math.max(10,scale*4.5));
+
+    cursor += v.w + FRAME_CM*2 + GAP_CM;
+  });
+
+  // Scale bar
+  const barCm = 100;
+  const barPx = barCm*scale;
+  if(barPx > 20){
+    c.strokeStyle='rgba(93,74,62,0.4)'; c.lineWidth=1; c.setLineDash([]);
+    const bx=10, by=displayH-10;
+    c.beginPath(); c.moveTo(bx,by); c.lineTo(bx+barPx,by); c.stroke();
+    c.beginPath(); c.moveTo(bx,by-3); c.lineTo(bx,by+3); c.stroke();
+    c.beginPath(); c.moveTo(bx+barPx,by-3); c.lineTo(bx+barPx,by+3); c.stroke();
+    c.fillStyle='rgba(93,74,62,0.5)';
+    c.font='9px DM Sans,sans-serif'; c.textAlign='center';
+    c.fillText('1 m', bx+barPx/2, by-4);
+  }
+
+  const used = hangVerks.reduce((s,v)=>s+v.w+FRAME_CM*2+GAP_CM,20);
+  document.getElementById('wallLegend').textContent =
+    hangVerks.length
+      ? `${hangVerks.length} verk · Används ${Math.round(used)} av ${ww} cm`
+      : 'Lägg till verk för att se dem på väggen';
+}
+
+window.addHangVerk = function(){
+  const title = document.getElementById('hangTitle').value.trim();
+  const w = parseInt(document.getElementById('hangW').value);
+  const h = parseInt(document.getElementById('hangH').value);
+  if(!title||!w||!h){ alert('Fyll i titel, bredd och höjd.'); return; }
+  hangVerks.push({title,w,h,id:Date.now()});
+  renderWall();
+  document.getElementById('hangTitle').value='';
+  document.getElementById('hangW').value='';
+  document.getElementById('hangH').value='';
+};
+
+window.clearWall = function(){ hangVerks=[]; renderWall(); };
+
+window.printWall = function(){
+  const canvas = document.getElementById('wallCanvas');
+  const ww = document.getElementById('wallWidth').value||'400';
+  const wn = document.getElementById('wallName').value.trim();
+  const img = canvas.toDataURL('image/png');
+  let html=`<h2>${wn||'Hängningsplanering'}</h2><p style="color:#9b887e;font-size:10pt">Väggbredd: ${ww} cm</p><br>`;
+  html+=`<img src="${img}" style="max-width:100%;border-radius:8px">`;
+  if(hangVerks.length){
+    html+=`<br><h4 style="font-size:9pt;text-transform:uppercase;letter-spacing:0.1em;color:#5d4a3e;margin:1rem 0 0.4rem">Verk</h4>`;
+    html+=`<ul style="font-size:10pt;line-height:1.8;padding-left:1.2rem">`;
+    hangVerks.forEach(v=>{ html+=`<li>${v.title} &mdash; ${v.w}×${v.h} cm</li>`; });
+    html+='</ul>';
+  }
+  openPrintWindow(html,'Hängningsplanering');
+};
+
+document.getElementById('wallWidth').addEventListener('input', renderWall);
+renderWall();
+
+// ── SHARED PRINT HELPER ───────────────────────────
+function openPrintWindow(bodyHtml, title){
+  const win = window.open('','_blank','width=800,height:900');
+  win.document.write(`<!DOCTYPE html><html><head><title>${title}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;color:#3a2e28;background:#fff;padding:3cm 2.5cm;font-size:11pt;line-height:1.65}
+    h2{font-family:'Cormorant Garamond',serif;font-size:22pt;font-weight:300;color:#5d4a3e;margin-bottom:0.3rem}
+    h3{font-family:'Cormorant Garamond',serif;font-size:16pt;font-weight:300}
+    h4{font-size:9pt;text-transform:uppercase;letter-spacing:0.1em;color:#5d4a3e;margin:1.5rem 0 0.4rem}
+    p{margin-bottom:0.5rem}
+    .branding{font-size:8pt;color:#9b887e;text-align:right;margin-top:2rem;border-top:0.5pt solid #e0d8cc;padding-top:0.5rem}
+    @media print{body{padding:1.5cm}}
+  </style></head><body>
+  ${bodyHtml}
+  <div class="branding">akvarellskiss.se — Gratis verktyg för svenska konstnärer</div>
+  <script>window.onload=()=>{window.print();}<\/script>
+  </body></html>`);
+  win.document.close();
+}
+
+})();
+</script>
+</body>
+</html>
